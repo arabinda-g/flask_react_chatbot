@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from .models import db, ChatSession, Message
+from .chatbot import ChatBot
 import uuid
 
 api = Blueprint('api', __name__)

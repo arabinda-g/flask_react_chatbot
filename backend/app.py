@@ -10,7 +10,7 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
     app.register_blueprint(api, url_prefix='/api')
-    Database.create_all(app)  # This will create the tables
+    Database.create_all(app)
     return app
 
 if __name__ == '__main__':
