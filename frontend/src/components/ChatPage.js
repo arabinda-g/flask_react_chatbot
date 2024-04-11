@@ -3,10 +3,14 @@ import { useParams } from 'react-router-dom';
 import ChatBox from './ChatBox';
 import ChatInput from './ChatInput';
 import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 function ChatPage() {
   const { token } = useParams();
   const [messages, setMessages] = useState([]);
+  const [loadingHistory, setLoadingHistory] = useState(true);
+  const [sendingMessage, setSendingMessage] = useState(false);
 
   useEffect(() => {
     const fetchHistory = async () => {
@@ -21,11 +25,13 @@ function ChatPage() {
       } catch (error) {
         console.error('Error fetching chat history:', error);
       }
+      setLoadingHistory(false);
     };
     fetchHistory();
   }, [token]);
 
   const handleSendMessage = async (message) => {
+    setSendingMessage(true);
     try {
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/chat`, { token, prompt: message });
       const newMessage = { sender: 'User', message };
@@ -34,7 +40,15 @@ function ChatPage() {
     } catch (error) {
       console.error('Error sending message:', error);
     }
+    setSendingMessage(false);
   };
+
+  if (loadingHistory) {
+    return <div className="text-center">
+      <FontAwesomeIcon icon={faSpinner} spin size="3x" />
+      <p>Loading chat history...</p>
+    </div>;
+  }
 
   return (
     <div className="container mt-5">

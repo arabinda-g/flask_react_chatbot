@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
-function ChatInput({ onSendMessage }) {
+function ChatInput({ onSendMessage, sendingMessage }) {
   const [message, setMessage] = useState('');
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    onSendMessage(message);
-    setMessage('');
+    if (message.trim() !== '' && !sendingMessage) {
+      onSendMessage(message);
+      setMessage('');
+    }
   };
 
   return (
@@ -18,9 +22,13 @@ function ChatInput({ onSendMessage }) {
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         required
+        autoFocus
+        disabled={sendingMessage}
       />
       <div className="input-group-append">
-        <button className="btn btn-outline-secondary" type="submit">Send</button>
+        <button className="btn btn-outline-secondary" type="submit" disabled={sendingMessage}>
+          {sendingMessage ? <FontAwesomeIcon icon={faSpinner} spin /> : 'Send'}
+        </button>
       </div>
     </form>
   );
