@@ -37,7 +37,7 @@ function ChatPage() {
   };
 
   return (
-    <div>
+    <div className="container mt-5">
       <ChatBox messages={messages} />
       <ChatInput onSendMessage={handleSendMessage} />
     </div>

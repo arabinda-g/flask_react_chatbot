@@ -16,9 +16,11 @@ function HomePage() {
   };
 
   return (
-    <div>
-      <h1>Welcome to the Chatbot</h1>
-      <button onClick={handleNewChat}>New Chat</button>
+    <div className="container mt-5">
+      <h1 className="text-center">Welcome to the Chatbot</h1>
+      <div className="d-flex justify-content-center">
+        <button onClick={handleNewChat} className="btn btn-primary">New Chat</button>
+      </div>
     </div>
   );
 }
