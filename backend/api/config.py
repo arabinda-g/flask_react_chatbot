@@ -1,5 +1,7 @@
-class Config(object):
-    DEBUG = True
-    TESTING = True
-    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://flask_crud:flask_crud@localhost/flask_crud'
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
+class Config:
+    DATABASE = 'flask_chatbot'
+    USER = 'flask_chatbot'
+    PASSWORD = 'flask_crud'
+    HOST = 'localhost'
+    PORT = '5432'
+    OPENAI_API_KEY = 'your_openai_api_key'

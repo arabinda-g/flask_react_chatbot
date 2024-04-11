@@ -1,26 +1,18 @@
 from flask import Flask
-from flask_cors import CORS
-
-from api.api import api
 from api.models import db
+from api.routes import api
+from api.database import Database
 from api.config import Config
 
-def create_app(config):
+def create_app():
     app = Flask(__name__)
-    CORS(app)
-    app.config.from_object(config)
-    register_extensions(app)
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{Config.USER}:{Config.PASSWORD}@{Config.HOST}:{Config.PORT}/{Config.DATABASE}'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    db.init_app(app)
+    app.register_blueprint(api, url_prefix='/api')
+    Database.create_all(app)  # This will create the tables
     return app
 
-
-def register_extensions(app):
-    api.init_app(app)
-    db.init_app(app)
-
-app = create_app(Config)
-
-
-# Run the application
 if __name__ == '__main__':
-    app = create_app(Config)
-    app.run(host='0.0.0.0', port=8000, debug=True, threaded=True)
+    app = create_app()
+    app.run(debug=True)

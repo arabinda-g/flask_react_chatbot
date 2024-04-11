@@ -1,29 +1,16 @@
-import json
-
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.ext.declarative import DeclarativeMeta
 
 db = SQLAlchemy()
 
-class User(db.Model):
-    __tablename__ = 'users'
-    firstname = db.Column(db.String(100), nullable=False, primary_key=True)
-    lastname = db.Column(db.String(100), nullable=False)
+class ChatSession(db.Model):
+    __tablename__ = 'chat_sessions'
 
-    def __repr__(self):
-        return '<User %r>' % self.firstname + ' ' + self.lastname
+    token = db.Column(db.String(36), primary_key=True)
 
-def to_dict(obj):
-    if isinstance(obj.__class__, DeclarativeMeta):
-        # an SQLAlchemy class
-        fields = {}
-        for field in [x for x in dir(obj) if not x.startswith('_') and x != 'metadata']:
-            data = obj.__getattribute__(field)
-            try:
-                json.dumps(data)  # this will fail on non-encodable values, like other classes
-                if data is not None:
-                    fields[field] = data
-            except TypeError:
-                pass
-        # a json-encodable dict
-        return fields
+class Message(db.Model):
+    __tablename__ = 'messages'
+
+    id = db.Column(db.Integer, primary_key=True)
+    token = db.Column(db.String(36), db.ForeignKey('chat_sessions.token'))
+    prompt = db.Column(db.Text)
+    response = db.Column(db.Text)
