@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from api.models import db
 from api.routes import api
 from api.database import Database
@@ -6,6 +7,7 @@ from api.config import Config
 
 def create_app():
     app = Flask(__name__)
+    CORS(app)
     app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{Config.USER}:{Config.PASSWORD}@{Config.HOST}:{Config.PORT}/{Config.DATABASE}'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
